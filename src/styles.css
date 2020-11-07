@@ -26,9 +26,13 @@
   border: 1px solid #ccc;
   border-bottom: 0;
   padding: 5px 5px;
-}
-
-.game {
   text-align: left;
+}
+.game {
   display: inline-block;
+}
+.game-control {
+  text-align: center;
+  margin: 10px !important;
+  padding: 5px 20px;
 }
