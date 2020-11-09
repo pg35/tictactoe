@@ -3,15 +3,8 @@ import React from "react";
 import PlayerTurn from "./PlayerTurn";
 import Score from "./Score";
 import Board from "./Board";
-
-import { getPlayerSymbol } from "../utils/common";
-
-const GameStatus = Object.freeze({
-  READY: Symbol("READY"),
-  STARTED: Symbol("STARTED"),
-  PAUSED: Symbol("PAUSED"),
-  FINISHED: Symbol("FINISHED")
-});
+import Control from "./Control";
+import { getPlayerSymbol, GameStatus } from "../utils/common";
 
 class Game extends React.Component {
   constructor(props) {
@@ -23,14 +16,12 @@ class Game extends React.Component {
       status: GameStatus.READY
     };
     this.handleCellClick = this.handleCellClick.bind(this);
-    this.changeStatus = this.changeStatus.bind(this);
+    this.handleStatusChange = this.handleStatusChange.bind(this);
   }
-  componentDidMount() {}
 
   getNextTurn(turn) {
     return turn ? 0 : 1;
   }
-
   getNextStatus(status) {
     switch (status) {
       case GameStatus.READY:
@@ -45,21 +36,7 @@ class Game extends React.Component {
         throw new Error("Invalid status");
     }
   }
-  getStatusLabel(status) {
-    switch (status) {
-      case GameStatus.READY:
-        return "Play";
-      case GameStatus.STARTED:
-        return "Pause";
-      case GameStatus.PAUSED:
-        return "Resume";
-      case GameStatus.FINISHED:
-        return "Replay";
-      default:
-        throw new Error("Invalid status");
-    }
-  }
-  changeStatus(status) {
+  handleStatusChange(status) {
     if (GameStatus.FINISHED === this.state.status) {
       this.setState({
         moves: {}
@@ -146,9 +123,7 @@ class Game extends React.Component {
           cells={cells}
           onCellClick={this.handleCellClick}
         />
-        <button className="game-control" onClick={this.changeStatus}>
-          {this.getStatusLabel(status)}
-        </button>
+        <Control status={status} onStatusChange={this.handleStatusChange} />
       </div>
     );
   }
